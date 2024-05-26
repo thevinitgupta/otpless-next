@@ -6,7 +6,7 @@ const signin = async(client_id, client_secret, phone, email) => {
     const magicLinkTokens = await magicLink(
       phone,
       email,
-      "http://localhost:3000",
+      "https://otpless-next.vercel.app/verification",
       "WHATSAPP",
       client_id,
       client_secret, 
@@ -26,4 +26,15 @@ const signin = async(client_id, client_secret, phone, email) => {
     return verifyTokenResponse;
   }
 
-  export {signin, verify};
+  const verifycode = async (client_id, client_secret,code) => {
+    
+    const verifyTokenResponse = await verifyCode(
+        code,
+        client_id,
+        client_secret,
+        );
+    console.log(verifyTokenResponse)
+    return verifyTokenResponse;
+  }
+
+  export {signin, verify, verifycode};
