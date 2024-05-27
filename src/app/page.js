@@ -17,7 +17,7 @@ export default function Home() {
     });
     const data = await userData.json();
     console.log(data);
-    if(data.errorMessage) router.replace("/auth");
+    if(data.error) router.replace("/auth");
     setUser(data.username)
     return data;
  }

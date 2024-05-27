@@ -17,7 +17,7 @@ export async function POST(req,res) {
         console.log("Token Verify : ",tokenVerified);
         const response = {
             username : tokenVerified.name || null,
-            errorMessage : tokenVerified.message || null,
+            error : tokenVerified.message || null,
         }
         console.log(tokenVerified,response);
         return NextResponse.json(response, {
