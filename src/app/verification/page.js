@@ -23,7 +23,7 @@ function Verification() {
             });
             const data = await resp.json();
             console.log(typeof data)
-            if(data.error!=null) {
+            if(data.error!==null) {
                 if(data.error==="Code already verified") router.replace("/");
                 else throw new Error(data.error);
             }
@@ -39,13 +39,8 @@ function Verification() {
         }
     }
 
-    const initialRender = useRef(true);
-
     useEffect(() => {
-      if (initialRender.current) {
-        initialRender.current = false;
-        return;
-      }
+    
       console.log(searchParams);
       const code = searchParams.get("code");
       handleCodeVerification(code);

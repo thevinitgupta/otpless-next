@@ -8,7 +8,7 @@ export async function POST(req,res) {
         const client_secret = process.env.OTPLESS_CLIENT_SECRET;
         const {code} = await req.json();
         console.log(code)
-        if(!code) return NextResponse.json({error : "Code Not Found"}, {
+        if(!code) return NextResponse.json({verified : false, error : "Code Not Found"}, {
             status : 400
         });
 
@@ -22,13 +22,14 @@ export async function POST(req,res) {
         })
         // console.log(tokenVerified,response);
         return NextResponse.json({
-            verified : true
+            verified : true,
+            error : null
         }, {
             status : 200 
         });
     } catch (error) {
         console.log(error);
-        return NextResponse.json({error : error.message || "Internal Server Error"}, {
+        return NextResponse.json({verified : false, error : error.message || "Internal Server Error"}, {
             status : 500
         });
     }
