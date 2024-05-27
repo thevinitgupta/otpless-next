@@ -15,7 +15,8 @@ export async function POST(req, res) {
     // console.log("Sign In Resp",singinResp);
     cookies().set("otp-type", singinResp.requestIds[0].type);
     cookies().set("otp-token", singinResp.requestIds[0].value, {
-        httpOnly : true
+        httpOnly : true,
+        secure : true
     });
     console.log(cookies().getAll())
     const response = {
