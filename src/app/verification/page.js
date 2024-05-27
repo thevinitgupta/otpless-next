@@ -46,7 +46,7 @@ function Verification() {
         initialRender.current = false;
         return;
       }
-    
+      console.log(searchParams);
       const code = searchParams.get("code");
       handleCodeVerification(code);
     }, [searchParams]);
