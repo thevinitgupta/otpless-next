@@ -1,12 +1,13 @@
 "use client";
 import {  useRouter, useSearchParams } from 'next/navigation'
-import React, { Suspense, useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 
 function Verification() {
     const searchParams = useSearchParams();
     const router = useRouter()
+
     const handleCodeVerification = async (code) => {
-        // try {
+        try {
             if(code.length===0 ) throw new Error("Code Not Found")
             
             const otpData = {
@@ -21,20 +22,32 @@ function Verification() {
                 }
             });
             const data = await resp.json();
-            if(data.success===false){
-                throw new Error(data.errorMessage);
-            }
-            else {
+            console.log(typeof data)
+            if(data.verified===true){
                 router.replace("/");
             }
-        // } catch (error) {
-        //     alert(error.message);
-        // }
+            else {
+                if(data.error==="Code already verified") router.replace("/");
+                throw new Error(data.error);
+            }
+        } catch (error) {
+            alert(error.message);
+        }
     }
+
+    const initialRender = useRef(true);
+
     useEffect(() => {
-        const code = searchParams.get("code");
-        handleCodeVerification(code);
-    })
+      if (initialRender.current) {
+        initialRender.current = false;
+        return;
+      }
+    
+      const code = searchParams.get("code");
+      handleCodeVerification(code);
+    }, [searchParams]);
+    
+
     return (
 
         <section className="flex min-h-screen flex-col items-center justify-start p-24">

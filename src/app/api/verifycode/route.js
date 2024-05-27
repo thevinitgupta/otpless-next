@@ -1,4 +1,4 @@
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { verifycode } from "../../../../utils/otpless";
 import { NextResponse } from "next/server";
 
@@ -13,14 +13,18 @@ export async function POST(req,res) {
         });
 
         const tokenVerified = await verifycode(client_id, client_secret, code);
-        console.log(tokenVerified);
-        const response = {
-            success : tokenVerified.success,
-            errorMessage : tokenVerified.errorMessage || null,
-        }
-        console.log(tokenVerified,response);
-        return NextResponse.json(response, {
-            status : tokenVerified.success ? 200 : 500
+        console.log("Verify Code",tokenVerified);          
+        const accessToken = tokenVerified["access_token"];
+        cookies().delete("otp-token")
+        cookies().set("otp-token", accessToken, {
+            httpOnly: true,
+            secure : true
+        })
+        // console.log(tokenVerified,response);
+        return NextResponse.json({
+            verified : true
+        }, {
+            status : 200 
         });
     } catch (error) {
         console.log(error);

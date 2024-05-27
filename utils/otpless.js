@@ -6,6 +6,7 @@ const signin = async(client_id, client_secret, phone, email) => {
     const magicLinkTokens = await magicLink(
       phone,
       email,
+      // "http://localhost:3000/verification",
       "https://otpless-next.vercel.app/verification",
       "WHATSAPP",
       client_id,
@@ -15,26 +16,36 @@ const signin = async(client_id, client_secret, phone, email) => {
       return magicLinkTokens;
   }
 
-  const verify = async (client_id, client_secret,token) => {
-    
-    const verifyTokenResponse = await verifyToken(
-        token,
-        client_id,
-        client_secret,
-        );
+  const verify = async (token) => {
+    const verifyTokenResponse = await fetch("https://auth.otpless.app/auth/v1/userinfo", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+    })
     console.log(verifyTokenResponse)
-    return verifyTokenResponse;
+    return await verifyTokenResponse.json();
   }
 
   const verifycode = async (client_id, client_secret,code) => {
-    
-    const verifyTokenResponse = await verifyCode(
-        code,
-        client_id,
-        client_secret,
-        );
-    console.log(verifyTokenResponse)
-    return verifyTokenResponse;
+    const data = {
+      "grant_type": "code",
+      "code": code,
+      "client_id": client_id,
+      "client_secret": client_secret
+    };
+    const verifyTokenResponse = await fetch("https://auth.otpless.app/auth/v1/token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body : JSON.stringify(data)
+    })
+    const verifyData = await verifyTokenResponse.json();
+    if(verifyTokenResponse.status!==200) throw new Error(verifyData.message);
+    // console.log(verifyTokenResponse)
+    return verifyData;
   }
 
   export {signin, verify, verifycode};
