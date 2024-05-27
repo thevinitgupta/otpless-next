@@ -9,7 +9,7 @@ export async function POST(req,res) {
         
         const token = cookies().get("otp-token");
         console.log(token)
-        if(!token.value) return NextResponse.json({error : "Token Not Found"}, {
+        if(!token || !token.value) return NextResponse.json({error : "Token Not Found"}, {
             status : 400
         });
 

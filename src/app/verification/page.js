@@ -23,15 +23,19 @@ function Verification() {
             });
             const data = await resp.json();
             console.log(typeof data)
-            if(data.verified===true){
+            if(data.error!=null) {
+                if(data.error==="Code already verified") router.replace("/");
+                else throw new Error(data.error);
+            }
+            else if(data.verified===true){
                 router.replace("/");
             }
             else {
-                if(data.error==="Code already verified") router.replace("/");
-                throw new Error(data.error);
+                throw new Error("Something Went Wrong");
             }
         } catch (error) {
             alert(error.message);
+            router.replace("/auth");
         }
     }
 
