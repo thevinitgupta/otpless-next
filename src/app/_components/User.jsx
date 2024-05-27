@@ -11,7 +11,7 @@ function User({name}) {
             
         </div>
         <div className="hidden lg:mt-0 lg:col-span-5 lg:flex">
-            <Image src={"/Hero.png"} alt="hero" height={420} width={420}/>
+            <Image src={"/hero.png"} alt="hero" height={420} width={420}/>
         </div>                
     </div>
 </section>
